@@ -146,11 +146,10 @@ class CompactionJobTestBase : public testing::Test {
     SequenceNumber smallest_seqno = kMaxSequenceNumber;
     SequenceNumber largest_seqno = 0;
     uint64_t oldest_blob_file_number = kInvalidBlobFileNumber;
-    for (auto kv : contents) {
+    for (auto& kv : contents) {
       ParsedInternalKey key;
-      std::string skey;
-      std::string value;
-      std::tie(skey, value) = kv;
+      const std::string& skey = kv.first;
+      const std::string& value = kv.second;
       const Status pik_status =
           ParseInternalKey(skey, &key, true /* log_err_key */);
 
@@ -316,12 +315,11 @@ class CompactionJobTestBase : public testing::Test {
     size_t num_input_files = 0;
     std::vector<CompactionInputFiles> compaction_input_files;
     for (size_t level = 0; level < input_files.size(); level++) {
-      auto level_files = input_files[level];
+      auto& level_files = input_files[level];
       CompactionInputFiles compaction_level;
       compaction_level.level = static_cast<int>(level);
-      compaction_level.files.insert(compaction_level.files.end(),
-          level_files.begin(), level_files.end());
-      compaction_input_files.push_back(compaction_level);
+      compaction_level.files = level_files;
+      compaction_input_files.push_back(std::move(compaction_level));
       num_input_files += level_files.size();
     }
 
