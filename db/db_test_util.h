@@ -824,7 +824,7 @@ class TestPutOperator : public MergeOperator {
 // etc.
 class CacheWrapper : public Cache {
  public:
-  explicit CacheWrapper(std::shared_ptr<Cache> target)
+  explicit CacheWrapper(const std::shared_ptr<Cache>& target)
       : target_(std::move(target)) {}
 
   const char* Name() const override { return target_->Name(); }

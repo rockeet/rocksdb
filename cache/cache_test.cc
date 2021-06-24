@@ -106,7 +106,7 @@ class CacheTest : public testing::TestWithParam<std::string> {
     return nullptr;
   }
 
-  int Lookup(std::shared_ptr<Cache> cache, int key) {
+  int Lookup(const std::shared_ptr<Cache>& cache, int key) {
     Cache::Handle* handle = cache->Lookup(EncodeKey(key));
     const int r = (handle == nullptr) ? -1 : DecodeValue(cache->Value(handle));
     if (handle != nullptr) {
@@ -115,13 +115,13 @@ class CacheTest : public testing::TestWithParam<std::string> {
     return r;
   }
 
-  void Insert(std::shared_ptr<Cache> cache, int key, int value,
+  void Insert(const std::shared_ptr<Cache>& cache, int key, int value,
               int charge = 1) {
     EXPECT_OK(cache->Insert(EncodeKey(key), EncodeValue(value), charge,
                             &CacheTest::Deleter));
   }
 
-  void Erase(std::shared_ptr<Cache> cache, int key) {
+  void Erase(const std::shared_ptr<Cache>& cache, int key) {
     cache->Erase(EncodeKey(key));
   }
 

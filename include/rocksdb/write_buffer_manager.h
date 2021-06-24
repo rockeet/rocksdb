@@ -47,7 +47,7 @@ class WriteBufferManager {
   // memory_usage() exceeds buffer_size. It will wait for flush to complete and
   // memory usage to drop down.
   explicit WriteBufferManager(size_t _buffer_size,
-                              std::shared_ptr<Cache> cache = {},
+                              const std::shared_ptr<Cache>& cache = {},
                               bool allow_stall = false);
   // No copying allowed
   WriteBufferManager(const WriteBufferManager&) = delete;

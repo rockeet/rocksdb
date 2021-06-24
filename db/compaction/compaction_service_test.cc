@@ -13,7 +13,7 @@ namespace ROCKSDB_NAMESPACE {
 class MyTestCompactionService : public CompactionService {
  public:
   MyTestCompactionService(const std::string& db_path,
-                          std::shared_ptr<FileSystem> fs, Options& options)
+                          const std::shared_ptr<FileSystem>& fs, Options& options)
       : db_path_(db_path), fs_(fs), options_(options) {}
 
   static const char* kClassName() { return "MyTestCompactionService"; }

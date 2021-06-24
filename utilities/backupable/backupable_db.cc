@@ -385,7 +385,7 @@ class BackupEngineImpl {
       app_metadata_ = app_metadata;
     }
 
-    Status AddFile(std::shared_ptr<FileInfo> file_info);
+    Status AddFile(const std::shared_ptr<FileInfo>& file_info);
 
     Status Delete(bool delete_meta = true);
 
@@ -2402,7 +2402,7 @@ Status BackupEngineImpl::GarbageCollect() {
 // ------- BackupMeta class --------
 
 Status BackupEngineImpl::BackupMeta::AddFile(
-    std::shared_ptr<FileInfo> file_info) {
+    const std::shared_ptr<FileInfo>& file_info) {
   auto itr = file_infos_->find(file_info->filename);
   if (itr == file_infos_->end()) {
     auto ret = file_infos_->insert({file_info->filename, file_info});

@@ -46,7 +46,7 @@ CompactionIterator::CompactionIterator(
     const SequenceNumber preserve_deletes_seqnum,
     const std::atomic<int>* manual_compaction_paused,
     const std::atomic<bool>* manual_compaction_canceled,
-    const std::shared_ptr<Logger> info_log,
+    const std::shared_ptr<Logger>& info_log,
     const std::string* full_history_ts_low)
     : CompactionIterator(
           input, cmp, merge_helper, last_sequence, snapshots,
@@ -73,7 +73,7 @@ CompactionIterator::CompactionIterator(
     const SequenceNumber preserve_deletes_seqnum,
     const std::atomic<int>* manual_compaction_paused,
     const std::atomic<bool>* manual_compaction_canceled,
-    const std::shared_ptr<Logger> info_log,
+    const std::shared_ptr<Logger>& info_log,
     const std::string* full_history_ts_low)
     : input_(
           input, cmp,

@@ -375,7 +375,7 @@ TEST_P(TablePropertiesTest, CustomizedTablePropertiesCollector) {
 namespace {
 void TestInternalKeyPropertiesCollector(
     bool backward_mode, uint64_t magic_number, bool sanitized,
-    std::shared_ptr<TableFactory> table_factory) {
+    const std::shared_ptr<TableFactory>& table_factory) {
   InternalKey keys[] = {
       InternalKey("A       ", 0, ValueType::kTypeValue),
       InternalKey("B       ", 1, ValueType::kTypeValue),

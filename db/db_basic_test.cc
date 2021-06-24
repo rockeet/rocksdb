@@ -2813,7 +2813,7 @@ class DBBasicTestMultiGet : public DBTestBase {
 
   class MyBlockCache : public CacheWrapper {
    public:
-    explicit MyBlockCache(std::shared_ptr<Cache> target)
+    explicit MyBlockCache(const std::shared_ptr<Cache>& target)
         : CacheWrapper(target),
           num_lookups_(0),
           num_found_(0),

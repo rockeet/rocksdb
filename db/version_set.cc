@@ -2811,7 +2811,7 @@ void VersionStorageInfo::AddFile(int level, FileMetaData* f) {
 }
 
 void VersionStorageInfo::AddBlobFile(
-    std::shared_ptr<BlobFileMetaData> blob_file_meta) {
+    const std::shared_ptr<BlobFileMetaData>& blob_file_meta) {
   assert(blob_file_meta);
 
   const uint64_t blob_file_number = blob_file_meta->GetBlobFileNumber();

@@ -207,7 +207,7 @@ class TransactionBaseImpl : public Transaction {
 
   virtual void SetSnapshot() override;
   void SetSnapshotOnNextOperation(
-      std::shared_ptr<TransactionNotifier> notifier = nullptr) override;
+      const std::shared_ptr<TransactionNotifier>& notifier = nullptr) override;
 
   void ClearSnapshot() override {
     snapshot_.reset();
@@ -309,8 +309,8 @@ class TransactionBaseImpl : public Transaction {
     // Record all locks tracked since the last savepoint
     std::shared_ptr<LockTracker> new_locks_;
 
-    SavePoint(std::shared_ptr<const Snapshot> snapshot, bool snapshot_needed,
-              std::shared_ptr<TransactionNotifier> snapshot_notifier,
+    SavePoint(const std::shared_ptr<const Snapshot>& snapshot, bool snapshot_needed,
+              const std::shared_ptr<TransactionNotifier>& snapshot_notifier,
               uint64_t num_puts, uint64_t num_deletes, uint64_t num_merges,
               const LockTrackerFactory& lock_tracker_factory)
         : snapshot_(snapshot),

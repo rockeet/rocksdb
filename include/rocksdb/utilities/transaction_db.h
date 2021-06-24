@@ -125,7 +125,7 @@ class RangeLockManagerHandle : public LockManagerHandle {
 //     range-locking mode
 //  2. Used to control the lock manager when the DB is already open.
 RangeLockManagerHandle* NewRangeLockManager(
-    std::shared_ptr<TransactionDBMutexFactory> mutex_factory);
+    const std::shared_ptr<TransactionDBMutexFactory>& mutex_factory);
 
 struct TransactionDBOptions {
   // Specifies the maximum number of keys that can be locked at the same time

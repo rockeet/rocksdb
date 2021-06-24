@@ -585,7 +585,7 @@ class LookupLiarCache : public CacheWrapper {
   int nth_lookup_not_found_ = 0;
 
  public:
-  explicit LookupLiarCache(std::shared_ptr<Cache> target)
+  explicit LookupLiarCache(const std::shared_ptr<Cache>& target)
       : CacheWrapper(std::move(target)) {}
 
   using Cache::Lookup;

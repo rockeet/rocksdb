@@ -96,7 +96,7 @@ struct LRUCacheOptions {
   LRUCacheOptions() {}
   LRUCacheOptions(size_t _capacity, int _num_shard_bits,
                   bool _strict_capacity_limit, double _high_pri_pool_ratio,
-                  std::shared_ptr<MemoryAllocator> _memory_allocator = nullptr,
+                  const std::shared_ptr<MemoryAllocator>& _memory_allocator = nullptr,
                   bool _use_adaptive_mutex = kDefaultToAdaptiveMutex,
                   CacheMetadataChargePolicy _metadata_charge_policy =
                       kDefaultCacheMetadataChargePolicy)
@@ -120,7 +120,7 @@ struct LRUCacheOptions {
 extern std::shared_ptr<Cache> NewLRUCache(
     size_t capacity, int num_shard_bits = -1,
     bool strict_capacity_limit = false, double high_pri_pool_ratio = 0.5,
-    std::shared_ptr<MemoryAllocator> memory_allocator = nullptr,
+    const std::shared_ptr<MemoryAllocator>& memory_allocator = nullptr,
     bool use_adaptive_mutex = kDefaultToAdaptiveMutex,
     CacheMetadataChargePolicy metadata_charge_policy =
         kDefaultCacheMetadataChargePolicy);
@@ -208,7 +208,7 @@ class Cache {
   using CreateCallback = std::function<Status(void* buf, size_t size,
                                               void** out_obj, size_t* charge)>;
 
-  Cache(std::shared_ptr<MemoryAllocator> allocator = nullptr)
+  Cache(const std::shared_ptr<MemoryAllocator>& allocator = nullptr)
       : memory_allocator_(std::move(allocator)) {}
   // No copying allowed
   Cache(const Cache&) = delete;

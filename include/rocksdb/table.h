@@ -751,10 +751,10 @@ class TableFactory : public Customizable {
 // @cuckoo_table_factory: cuckoo table factory to use. If NULL, use a default
 // one.
 extern TableFactory* NewAdaptiveTableFactory(
-    std::shared_ptr<TableFactory> table_factory_to_write = nullptr,
-    std::shared_ptr<TableFactory> block_based_table_factory = nullptr,
-    std::shared_ptr<TableFactory> plain_table_factory = nullptr,
-    std::shared_ptr<TableFactory> cuckoo_table_factory = nullptr);
+    const std::shared_ptr<TableFactory>& table_factory_to_write = nullptr,
+    const std::shared_ptr<TableFactory>& block_based_table_factory = nullptr,
+    const std::shared_ptr<TableFactory>& plain_table_factory = nullptr,
+    const std::shared_ptr<TableFactory>& cuckoo_table_factory = nullptr);
 
 #endif  // ROCKSDB_LITE
 

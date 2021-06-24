@@ -245,7 +245,7 @@ class BlobDBImpl : public BlobDB {
   // to a single thread (like in the case of new files written during
   // compaction/GC), the locks on write_mutex_ and the blob file's mutex_ can be
   // avoided.
-  Status CloseBlobFile(std::shared_ptr<BlobFile> bfile);
+  Status CloseBlobFile(const std::shared_ptr<BlobFile>& bfile);
 
   // Close a file if its size exceeds blob_file_size
   // REQUIRES: lock held on write_mutex_.
@@ -254,7 +254,7 @@ class BlobDBImpl : public BlobDB {
   // Mark file as obsolete and move the file to obsolete file list.
   //
   // REQUIRED: hold write lock of mutex_ or during DB open.
-  void ObsoleteBlobFile(std::shared_ptr<BlobFile> blob_file,
+  void ObsoleteBlobFile(const std::shared_ptr<BlobFile>& blob_file,
                         SequenceNumber obsolete_seq, bool update_size);
 
   Status PutBlobValue(const WriteOptions& options, const Slice& key,
@@ -312,7 +312,7 @@ class BlobDBImpl : public BlobDB {
 
   // Register a new blob file.
   // REQUIRES: write lock on mutex_.
-  void RegisterBlobFile(std::shared_ptr<BlobFile> blob_file);
+  void RegisterBlobFile(const std::shared_ptr<BlobFile>& blob_file);
 
   // collect all the blob log files from the blob directory
   Status GetAllBlobFiles(std::set<uint64_t>* file_numbers);

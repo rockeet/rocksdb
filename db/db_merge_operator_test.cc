@@ -281,7 +281,7 @@ TEST_P(MergeOperatorPinningTest, OperandsMultiBlocks) {
 
 class MergeOperatorHook : public MergeOperator {
  public:
-  explicit MergeOperatorHook(std::shared_ptr<MergeOperator> _merge_op)
+  explicit MergeOperatorHook(const std::shared_ptr<MergeOperator>& _merge_op)
       : merge_op_(_merge_op) {}
 
   bool FullMergeV2(const MergeOperationInput& merge_in,

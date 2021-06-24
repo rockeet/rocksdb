@@ -150,7 +150,7 @@ TEST_F(RateLimiterTest, LimitChangeTest) {
   ROCKSDB_NAMESPACE::SyncPoint::GetInstance()->EnableProcessing();
   struct Arg {
     Arg(int32_t _request_size, Env::IOPriority _pri,
-        std::shared_ptr<RateLimiter> _limiter)
+        const std::shared_ptr<RateLimiter>& _limiter)
         : request_size(_request_size), pri(_pri), limiter(_limiter) {}
     int32_t request_size;
     Env::IOPriority pri;

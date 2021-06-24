@@ -23,7 +23,7 @@ class StackableDB : public DB {
   explicit StackableDB(DB* db) : db_(db) {}
 
   // StackableDB take shared ownership of the underlying db.
-  explicit StackableDB(std::shared_ptr<DB> db)
+  explicit StackableDB(const std::shared_ptr<DB>& db)
       : db_(db.get()), shared_db_ptr_(db) {}
 
   ~StackableDB() {

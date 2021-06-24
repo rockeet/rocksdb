@@ -42,7 +42,7 @@ enum HistogramsInternal : uint32_t {
 
 class StatisticsImpl : public Statistics {
  public:
-  StatisticsImpl(std::shared_ptr<Statistics> stats);
+  StatisticsImpl(const std::shared_ptr<Statistics>& stats);
   virtual ~StatisticsImpl();
 
   virtual uint64_t getTickerCount(uint32_t ticker_type) const override;

@@ -96,7 +96,7 @@ class FileSystemTracingWrapper : public FileSystemWrapper {
 // is disabled.
 class FileSystemPtr {
  public:
-  FileSystemPtr(std::shared_ptr<FileSystem> fs,
+  FileSystemPtr(const std::shared_ptr<FileSystem>& fs,
                 const std::shared_ptr<IOTracer>& io_tracer)
       : fs_(fs), io_tracer_(io_tracer) {
     fs_tracer_ = std::make_shared<FileSystemTracingWrapper>(fs_, io_tracer_);
@@ -134,7 +134,7 @@ class FileSystemPtr {
 class FSSequentialFileTracingWrapper : public FSSequentialFileWrapper {
  public:
   FSSequentialFileTracingWrapper(FSSequentialFile* t,
-                                 std::shared_ptr<IOTracer> io_tracer,
+                                 const std::shared_ptr<IOTracer>& io_tracer,
                                  const std::string& file_name)
       : FSSequentialFileWrapper(t),
         io_tracer_(io_tracer),
@@ -206,7 +206,7 @@ class FSSequentialFilePtr {
 class FSRandomAccessFileTracingWrapper : public FSRandomAccessFileWrapper {
  public:
   FSRandomAccessFileTracingWrapper(FSRandomAccessFile* t,
-                                   std::shared_ptr<IOTracer> io_tracer,
+                                   const std::shared_ptr<IOTracer>& io_tracer,
                                    const std::string& file_name)
       : FSRandomAccessFileWrapper(t),
         io_tracer_(io_tracer),
@@ -281,7 +281,7 @@ class FSRandomAccessFilePtr {
 class FSWritableFileTracingWrapper : public FSWritableFileWrapper {
  public:
   FSWritableFileTracingWrapper(FSWritableFile* t,
-                               std::shared_ptr<IOTracer> io_tracer,
+                               const std::shared_ptr<IOTracer>& io_tracer,
                                const std::string& file_name)
       : FSWritableFileWrapper(t),
         io_tracer_(io_tracer),
@@ -378,7 +378,7 @@ class FSWritableFilePtr {
 class FSRandomRWFileTracingWrapper : public FSRandomRWFileWrapper {
  public:
   FSRandomRWFileTracingWrapper(FSRandomRWFile* t,
-                               std::shared_ptr<IOTracer> io_tracer,
+                               const std::shared_ptr<IOTracer>& io_tracer,
                                const std::string& file_name)
       : FSRandomRWFileWrapper(t),
         io_tracer_(io_tracer),
@@ -417,7 +417,7 @@ class FSRandomRWFileTracingWrapper : public FSRandomRWFileWrapper {
 class FSRandomRWFilePtr {
  public:
   FSRandomRWFilePtr(std::unique_ptr<FSRandomRWFile>&& fs,
-                    std::shared_ptr<IOTracer> io_tracer,
+                    const std::shared_ptr<IOTracer>& io_tracer,
                     const std::string& file_name)
       : fs_(std::move(fs)),
         io_tracer_(io_tracer),

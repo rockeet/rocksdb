@@ -56,7 +56,7 @@ class RangeTreeLockManager : public RangeLockManagerBase,
   }
 
   explicit RangeTreeLockManager(
-      std::shared_ptr<TransactionDBMutexFactory> mutex_factory);
+      const std::shared_ptr<TransactionDBMutexFactory>& mutex_factory);
 
   ~RangeTreeLockManager() override;
 

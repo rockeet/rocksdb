@@ -91,7 +91,7 @@ class CountingLogger : public Logger {
 };
 
 Options GetOptionsWithNumLevels(int num_levels,
-                                std::shared_ptr<CountingLogger> logger) {
+                                const std::shared_ptr<CountingLogger>& logger) {
   Options opt;
   opt.num_levels = num_levels;
   opt.info_log = logger;

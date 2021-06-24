@@ -153,7 +153,7 @@ class SimCacheImpl : public SimCache {
  public:
   // capacity for real cache (ShardedLRUCache)
   // test_capacity for key only cache
-  SimCacheImpl(std::shared_ptr<Cache> sim_cache, std::shared_ptr<Cache> cache)
+  SimCacheImpl(const std::shared_ptr<Cache>& sim_cache, const std::shared_ptr<Cache>& cache)
       : cache_(cache),
         key_only_cache_(sim_cache),
         miss_times_(0),
@@ -348,7 +348,7 @@ class SimCacheImpl : public SimCache {
 }  // end anonymous namespace
 
 // For instrumentation purpose, use NewSimCache instead
-std::shared_ptr<SimCache> NewSimCache(std::shared_ptr<Cache> cache,
+const std::shared_ptr<SimCache> NewSimCache(const std::shared_ptr<Cache>& cache,
                                       size_t sim_capacity, int num_shard_bits) {
   LRUCacheOptions co;
   co.capacity = sim_capacity;
@@ -357,8 +357,8 @@ std::shared_ptr<SimCache> NewSimCache(std::shared_ptr<Cache> cache,
   return NewSimCache(NewLRUCache(co), cache, num_shard_bits);
 }
 
-std::shared_ptr<SimCache> NewSimCache(std::shared_ptr<Cache> sim_cache,
-                                      std::shared_ptr<Cache> cache,
+const std::shared_ptr<SimCache> NewSimCache(const std::shared_ptr<Cache>& sim_cache,
+                                      const std::shared_ptr<Cache>& cache,
                                       int num_shard_bits) {
   if (num_shard_bits >= 20) {
     return nullptr;  // the cache cannot be sharded into too many fine pieces

@@ -18,7 +18,7 @@ class LogReaderContainer {
  public:
   LogReaderContainer()
       : reader_(nullptr), reporter_(nullptr), status_(nullptr) {}
-  LogReaderContainer(Env* env, std::shared_ptr<Logger> info_log,
+  LogReaderContainer(Env* env, const std::shared_ptr<Logger>& info_log,
                      const std::string& fname,
                      std::unique_ptr<SequentialFileReader>&& file_reader,
                      uint64_t log_number) {

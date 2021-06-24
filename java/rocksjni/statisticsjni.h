@@ -19,8 +19,8 @@ namespace ROCKSDB_NAMESPACE {
 
 class StatisticsJni : public StatisticsImpl {
  public:
-  StatisticsJni(std::shared_ptr<Statistics> stats);
-  StatisticsJni(std::shared_ptr<Statistics> stats,
+  StatisticsJni(const std::shared_ptr<Statistics>& stats);
+  StatisticsJni(const std::shared_ptr<Statistics>& stats,
                 const std::set<uint32_t> ignore_histograms);
   virtual bool HistEnabledForType(uint32_t type) const override;
 

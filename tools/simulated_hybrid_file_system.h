@@ -62,7 +62,7 @@ class SimulatedHybridFileSystem : public FileSystemWrapper {
 class SimulatedHybridRaf : public FSRandomAccessFileWrapper {
  public:
   SimulatedHybridRaf(FSRandomAccessFile* t,
-                     std::shared_ptr<RateLimiter> rate_limiter,
+                     const std::shared_ptr<RateLimiter>& rate_limiter,
                      Temperature temperature)
       : FSRandomAccessFileWrapper(t),
         rate_limiter_(rate_limiter),

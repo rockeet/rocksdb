@@ -13,10 +13,10 @@
 namespace ROCKSDB_NAMESPACE {
 
 AdaptiveTableFactory::AdaptiveTableFactory(
-    std::shared_ptr<TableFactory> table_factory_to_write,
-    std::shared_ptr<TableFactory> block_based_table_factory,
-    std::shared_ptr<TableFactory> plain_table_factory,
-    std::shared_ptr<TableFactory> cuckoo_table_factory)
+    const std::shared_ptr<TableFactory>& table_factory_to_write,
+    const std::shared_ptr<TableFactory>& block_based_table_factory,
+    const std::shared_ptr<TableFactory>& plain_table_factory,
+    const std::shared_ptr<TableFactory>& cuckoo_table_factory)
     : table_factory_to_write_(table_factory_to_write),
       block_based_table_factory_(block_based_table_factory),
       plain_table_factory_(plain_table_factory),
@@ -113,10 +113,10 @@ std::string AdaptiveTableFactory::GetPrintableOptions() const {
 }
 
 extern TableFactory* NewAdaptiveTableFactory(
-    std::shared_ptr<TableFactory> table_factory_to_write,
-    std::shared_ptr<TableFactory> block_based_table_factory,
-    std::shared_ptr<TableFactory> plain_table_factory,
-    std::shared_ptr<TableFactory> cuckoo_table_factory) {
+    const std::shared_ptr<TableFactory>& table_factory_to_write,
+    const std::shared_ptr<TableFactory>& block_based_table_factory,
+    const std::shared_ptr<TableFactory>& plain_table_factory,
+    const std::shared_ptr<TableFactory>& cuckoo_table_factory) {
   return new AdaptiveTableFactory(table_factory_to_write,
       block_based_table_factory, plain_table_factory, cuckoo_table_factory);
 }

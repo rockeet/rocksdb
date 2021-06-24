@@ -707,7 +707,7 @@ std::shared_ptr<BlobFile> BlobDBImpl::NewBlobFile(
   return blob_file;
 }
 
-void BlobDBImpl::RegisterBlobFile(std::shared_ptr<BlobFile> blob_file) {
+void BlobDBImpl::RegisterBlobFile(const std::shared_ptr<BlobFile>& blob_file) {
   const uint64_t blob_file_number = blob_file->BlobFileNumber();
 
   auto it = blob_files_.lower_bound(blob_file_number);
@@ -1722,7 +1722,7 @@ std::pair<bool, int64_t> BlobDBImpl::SanityCheck(bool aborted) {
   return std::make_pair(true, -1);
 }
 
-Status BlobDBImpl::CloseBlobFile(std::shared_ptr<BlobFile> bfile) {
+Status BlobDBImpl::CloseBlobFile(const std::shared_ptr<BlobFile>& bfile) {
   TEST_SYNC_POINT("BlobDBImpl::CloseBlobFile");
   assert(bfile);
   assert(!bfile->Immutable());
@@ -1789,7 +1789,7 @@ Status BlobDBImpl::CloseBlobFileIfNeeded(std::shared_ptr<BlobFile>& bfile) {
   return CloseBlobFile(bfile);
 }
 
-void BlobDBImpl::ObsoleteBlobFile(std::shared_ptr<BlobFile> blob_file,
+void BlobDBImpl::ObsoleteBlobFile(const std::shared_ptr<BlobFile>& blob_file,
                                   SequenceNumber obsolete_seq,
                                   bool update_size) {
   assert(blob_file->Immutable());

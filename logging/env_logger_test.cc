@@ -14,12 +14,12 @@ namespace ROCKSDB_NAMESPACE {
 namespace {
 // In this test we only want to Log some simple log message with
 // no format.
-void LogMessage(std::shared_ptr<Logger> logger, const std::string& message) {
+void LogMessage(const std::shared_ptr<Logger>& logger, const std::string& message) {
   Log(logger, "%s", message.c_str());
 }
 
 // Helper method to write the message num_times in the given logger.
-void WriteLogs(std::shared_ptr<Logger> logger, const std::string& message,
+void WriteLogs(const std::shared_ptr<Logger>& logger, const std::string& message,
                int num_times) {
   for (int ii = 0; ii < num_times; ++ii) {
     LogMessage(logger, message);

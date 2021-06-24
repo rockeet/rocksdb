@@ -87,7 +87,7 @@ void TransactionBaseImpl::SetSnapshotInternal(const Snapshot* snapshot) {
 }
 
 void TransactionBaseImpl::SetSnapshotOnNextOperation(
-    std::shared_ptr<TransactionNotifier> notifier) {
+    const std::shared_ptr<TransactionNotifier>& notifier) {
   snapshot_needed_ = true;
   snapshot_notifier_ = notifier;
 }

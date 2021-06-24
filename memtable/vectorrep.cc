@@ -55,7 +55,7 @@ class VectorRep : public MemTableRep {
     void DoSort() const;
    public:
     explicit Iterator(class VectorRep* vrep,
-      std::shared_ptr<std::vector<const char*>> bucket,
+      const std::shared_ptr<std::vector<const char*>>& bucket,
       const KeyComparator& compare);
 
     // Initialize an iterator over the specified collection.
@@ -144,7 +144,7 @@ VectorRep::VectorRep(const KeyComparator& compare, Allocator* allocator,
 }
 
 VectorRep::Iterator::Iterator(class VectorRep* vrep,
-                   std::shared_ptr<std::vector<const char*>> bucket,
+                   const std::shared_ptr<std::vector<const char*>>& bucket,
                    const KeyComparator& compare)
 : vrep_(vrep),
   bucket_(bucket),

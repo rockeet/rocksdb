@@ -26,7 +26,7 @@ const std::string kDbName = test::PerThreadDBPath("cassandra_functional_test");
 
 class CassandraStore {
  public:
-  explicit CassandraStore(std::shared_ptr<DB> db)
+  explicit CassandraStore(const std::shared_ptr<DB>& db)
       : db_(db), write_option_(), get_option_() {
     assert(db);
   }

@@ -178,7 +178,7 @@ class Transaction {
   //                             txn2->Commit();
   //   txn1->GetForUpdate(opts, "A", ...);  // FAIL!
   virtual void SetSnapshotOnNextOperation(
-      std::shared_ptr<TransactionNotifier> notifier = nullptr) = 0;
+      const std::shared_ptr<TransactionNotifier>& notifier = nullptr) = 0;
 
   // Returns the Snapshot created by the last call to SetSnapshot().
   //

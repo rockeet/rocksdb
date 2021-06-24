@@ -67,7 +67,7 @@ class CacheSimulatorTest : public testing::Test {
     return record;
   }
 
-  void AssertCache(std::shared_ptr<Cache> sim_cache,
+  void AssertCache(const std::shared_ptr<Cache>& sim_cache,
                    const MissRatioStats& miss_ratio_stats,
                    uint64_t expected_usage, uint64_t expected_num_accesses,
                    uint64_t expected_num_misses,

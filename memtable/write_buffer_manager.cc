@@ -31,7 +31,7 @@ struct WriteBufferManager::CacheRep {
   uint64_t next_cache_key_id_ = 0;
   std::vector<Cache::Handle*> dummy_handles_;
 
-  explicit CacheRep(std::shared_ptr<Cache> cache)
+  explicit CacheRep(const std::shared_ptr<Cache>& cache)
       : cache_(cache), cache_allocated_size_(0) {
     memset(cache_key_, 0, kCacheKeyPrefix);
     size_t pointer_size = sizeof(const void*);
@@ -51,7 +51,7 @@ struct WriteBufferManager::CacheRep {};
 #endif  // ROCKSDB_LITE
 
 WriteBufferManager::WriteBufferManager(size_t _buffer_size,
-                                       std::shared_ptr<Cache> cache,
+                                       const std::shared_ptr<Cache>& cache,
                                        bool allow_stall)
     : buffer_size_(_buffer_size),
       mutable_limit_(buffer_size_ * 7 / 8),

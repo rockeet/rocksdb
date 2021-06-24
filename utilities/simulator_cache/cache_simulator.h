@@ -82,7 +82,7 @@ class MissRatioStats {
 // A ghost cache admits an entry on its second access.
 class GhostCache {
  public:
-  explicit GhostCache(std::shared_ptr<Cache> sim_cache);
+  explicit GhostCache(const std::shared_ptr<Cache>& sim_cache);
   ~GhostCache() = default;
   // No copy and move.
   GhostCache(const GhostCache&) = delete;
@@ -102,7 +102,7 @@ class GhostCache {
 class CacheSimulator {
  public:
   CacheSimulator(std::unique_ptr<GhostCache>&& ghost_cache,
-                 std::shared_ptr<Cache> sim_cache);
+                 const std::shared_ptr<Cache>& sim_cache);
   virtual ~CacheSimulator() = default;
   // No copy and move.
   CacheSimulator(const CacheSimulator&) = delete;
@@ -128,7 +128,7 @@ class CacheSimulator {
 class PrioritizedCacheSimulator : public CacheSimulator {
  public:
   PrioritizedCacheSimulator(std::unique_ptr<GhostCache>&& ghost_cache,
-                            std::shared_ptr<Cache> sim_cache)
+                            const std::shared_ptr<Cache>& sim_cache)
       : CacheSimulator(std::move(ghost_cache), sim_cache) {}
   void Access(const BlockCacheTraceRecord& access) override;
 
@@ -156,7 +156,7 @@ class PrioritizedCacheSimulator : public CacheSimulator {
 class HybridRowBlockCacheSimulator : public PrioritizedCacheSimulator {
  public:
   HybridRowBlockCacheSimulator(std::unique_ptr<GhostCache>&& ghost_cache,
-                               std::shared_ptr<Cache> sim_cache,
+                               const std::shared_ptr<Cache>& sim_cache,
                                bool insert_blocks_upon_row_kvpair_miss)
       : PrioritizedCacheSimulator(std::move(ghost_cache), sim_cache),
         insert_blocks_upon_row_kvpair_miss_(

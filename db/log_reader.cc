@@ -23,7 +23,7 @@ namespace log {
 Reader::Reporter::~Reporter() {
 }
 
-Reader::Reader(std::shared_ptr<Logger> info_log,
+Reader::Reader(const std::shared_ptr<Logger>& info_log,
                std::unique_ptr<SequentialFileReader>&& _file,
                Reporter* reporter, bool checksum, uint64_t log_num)
     : info_log_(info_log),

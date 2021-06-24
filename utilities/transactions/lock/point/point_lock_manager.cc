@@ -46,7 +46,7 @@ struct LockInfo {
 };
 
 struct LockMapStripe {
-  explicit LockMapStripe(std::shared_ptr<TransactionDBMutexFactory> factory) {
+  explicit LockMapStripe(const std::shared_ptr<TransactionDBMutexFactory>& factory) {
     stripe_mutex = factory->AllocateMutex();
     stripe_cv = factory->AllocateCondVar();
     assert(stripe_mutex);
@@ -67,7 +67,7 @@ struct LockMapStripe {
 // Map of #num_stripes LockMapStripes
 struct LockMap {
   explicit LockMap(size_t num_stripes,
-                   std::shared_ptr<TransactionDBMutexFactory> factory)
+                   const std::shared_ptr<TransactionDBMutexFactory>& factory)
       : num_stripes_(num_stripes) {
     lock_map_stripes_.reserve(num_stripes);
     for (size_t i = 0; i < num_stripes; i++) {

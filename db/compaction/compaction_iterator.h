@@ -164,7 +164,7 @@ class CompactionIterator {
       const SequenceNumber preserve_deletes_seqnum = 0,
       const std::atomic<int>* manual_compaction_paused = nullptr,
       const std::atomic<bool>* manual_compaction_canceled = nullptr,
-      const std::shared_ptr<Logger> info_log = nullptr,
+      const std::shared_ptr<Logger>& info_log = nullptr,
       const std::string* full_history_ts_low = nullptr);
 
   // Constructor with custom CompactionProxy, used for tests.
@@ -182,7 +182,7 @@ class CompactionIterator {
       const SequenceNumber preserve_deletes_seqnum = 0,
       const std::atomic<int>* manual_compaction_paused = nullptr,
       const std::atomic<bool>* manual_compaction_canceled = nullptr,
-      const std::shared_ptr<Logger> info_log = nullptr,
+      const std::shared_ptr<Logger>& info_log = nullptr,
       const std::string* full_history_ts_low = nullptr);
 
   ~CompactionIterator();

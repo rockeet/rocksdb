@@ -127,7 +127,7 @@ class VersionStorageInfo {
 
   void AddFile(int level, FileMetaData* f);
 
-  void AddBlobFile(std::shared_ptr<BlobFileMetaData> blob_file_meta);
+  void AddBlobFile(const std::shared_ptr<BlobFileMetaData>& blob_file_meta);
 
   void SetFinalized();
 

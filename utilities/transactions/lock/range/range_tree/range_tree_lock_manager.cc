@@ -26,7 +26,7 @@
 namespace ROCKSDB_NAMESPACE {
 
 RangeLockManagerHandle* NewRangeLockManager(
-    std::shared_ptr<TransactionDBMutexFactory> mutex_factory) {
+    const std::shared_ptr<TransactionDBMutexFactory>& mutex_factory) {
   std::shared_ptr<TransactionDBMutexFactory> use_factory;
 
   if (mutex_factory) {
@@ -255,7 +255,7 @@ void UnrefLockTreeMapsCache(void* ptr) {
 }  // anonymous namespace
 
 RangeTreeLockManager::RangeTreeLockManager(
-    std::shared_ptr<TransactionDBMutexFactory> mutex_factory)
+    const std::shared_ptr<TransactionDBMutexFactory>& mutex_factory)
     : mutex_factory_(mutex_factory),
       ltree_lookup_cache_(new ThreadLocalPtr(&UnrefLockTreeMapsCache)),
       dlock_buffer_(10) {

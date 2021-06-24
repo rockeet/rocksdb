@@ -95,7 +95,7 @@ class BlobFileMetaData {
   using LinkedSsts = std::unordered_set<uint64_t>;
 
   static std::shared_ptr<BlobFileMetaData> Create(
-      std::shared_ptr<SharedBlobFileMetaData> shared_meta,
+      const std::shared_ptr<SharedBlobFileMetaData>& shared_meta,
       LinkedSsts linked_ssts, uint64_t garbage_blob_count,
       uint64_t garbage_blob_bytes) {
     return std::shared_ptr<BlobFileMetaData>(
@@ -142,7 +142,7 @@ class BlobFileMetaData {
   std::string DebugString() const;
 
  private:
-  BlobFileMetaData(std::shared_ptr<SharedBlobFileMetaData> shared_meta,
+  BlobFileMetaData(const std::shared_ptr<SharedBlobFileMetaData>& shared_meta,
                    LinkedSsts linked_ssts, uint64_t garbage_blob_count,
                    uint64_t garbage_blob_bytes)
       : shared_meta_(std::move(shared_meta)),

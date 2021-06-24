@@ -196,7 +196,7 @@ class TtlCompactionFilterFactory : public CompactionFilterFactory {
  public:
   TtlCompactionFilterFactory(
       int32_t ttl, SystemClock* clock,
-      std::shared_ptr<CompactionFilterFactory> comp_filter_factory)
+      const std::shared_ptr<CompactionFilterFactory>& comp_filter_factory)
       : ttl_(ttl),
         clock_(clock),
         user_comp_filter_factory_(comp_filter_factory) {}

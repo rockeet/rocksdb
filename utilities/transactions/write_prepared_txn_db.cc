@@ -305,7 +305,7 @@ std::vector<Status> WritePreparedTxnDB::MultiGet(
 // Struct to hold ownership of snapshot and read callback for iterator cleanup.
 struct WritePreparedTxnDB::IteratorState {
   IteratorState(WritePreparedTxnDB* txn_db, SequenceNumber sequence,
-                std::shared_ptr<ManagedSnapshot> s,
+                const std::shared_ptr<ManagedSnapshot>& s,
                 SequenceNumber min_uncommitted)
       : callback(txn_db, sequence, min_uncommitted, kBackedByDBSnapshot),
         snapshot(s) {}

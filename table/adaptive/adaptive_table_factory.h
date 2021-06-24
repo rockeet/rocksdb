@@ -26,10 +26,10 @@ class AdaptiveTableFactory : public TableFactory {
   ~AdaptiveTableFactory() {}
 
   explicit AdaptiveTableFactory(
-      std::shared_ptr<TableFactory> table_factory_to_write,
-      std::shared_ptr<TableFactory> block_based_table_factory,
-      std::shared_ptr<TableFactory> plain_table_factory,
-      std::shared_ptr<TableFactory> cuckoo_table_factory);
+      const std::shared_ptr<TableFactory>& table_factory_to_write,
+      const std::shared_ptr<TableFactory>& block_based_table_factory,
+      const std::shared_ptr<TableFactory>& plain_table_factory,
+      const std::shared_ptr<TableFactory>& cuckoo_table_factory);
 
   const char* Name() const override { return "AdaptiveTableFactory"; }
 

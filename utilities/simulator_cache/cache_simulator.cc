@@ -13,7 +13,7 @@ namespace {
 const std::string kGhostCachePrefix = "ghost_";
 }  // namespace
 
-GhostCache::GhostCache(std::shared_ptr<Cache> sim_cache)
+GhostCache::GhostCache(const std::shared_ptr<Cache>& sim_cache)
     : sim_cache_(sim_cache) {}
 
 bool GhostCache::Admit(const Slice& lookup_key) {
@@ -30,7 +30,7 @@ bool GhostCache::Admit(const Slice& lookup_key) {
 }
 
 CacheSimulator::CacheSimulator(std::unique_ptr<GhostCache>&& ghost_cache,
-                               std::shared_ptr<Cache> sim_cache)
+                               const std::shared_ptr<Cache>& sim_cache)
     : ghost_cache_(std::move(ghost_cache)), sim_cache_(sim_cache) {}
 
 void CacheSimulator::Access(const BlockCacheTraceRecord& access) {

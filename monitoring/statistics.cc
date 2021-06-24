@@ -268,7 +268,7 @@ std::shared_ptr<Statistics> CreateDBStatistics() {
   return std::make_shared<StatisticsImpl>(nullptr);
 }
 
-StatisticsImpl::StatisticsImpl(std::shared_ptr<Statistics> stats)
+StatisticsImpl::StatisticsImpl(const std::shared_ptr<Statistics>& stats)
     : stats_(std::move(stats)) {}
 
 StatisticsImpl::~StatisticsImpl() {}
