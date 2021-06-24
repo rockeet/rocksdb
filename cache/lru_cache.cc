@@ -745,8 +745,8 @@ void LRUCache::WaitAll(std::vector<Handle*>& handles) {
 std::shared_ptr<Cache> NewLRUCache(
     size_t capacity, int num_shard_bits, bool strict_capacity_limit,
     double high_pri_pool_ratio,
-    const std::shared_ptr<MemoryAllocator>& memory_allocator, bool use_adaptive_mutex,
-    CacheMetadataChargePolicy metadata_charge_policy,
+    const std::shared_ptr<MemoryAllocator>& memory_allocator,
+    bool use_adaptive_mutex, CacheMetadataChargePolicy metadata_charge_policy,
     const std::shared_ptr<SecondaryCache>& secondary_cache) {
   if (num_shard_bits >= 20) {
     return nullptr;  // the cache cannot be sharded into too many fine pieces
@@ -775,8 +775,8 @@ std::shared_ptr<Cache> NewLRUCache(const LRUCacheOptions& cache_opts) {
 std::shared_ptr<Cache> NewLRUCache(
     size_t capacity, int num_shard_bits, bool strict_capacity_limit,
     double high_pri_pool_ratio,
-    const std::shared_ptr<MemoryAllocator>& memory_allocator, bool use_adaptive_mutex,
-    CacheMetadataChargePolicy metadata_charge_policy) {
+    const std::shared_ptr<MemoryAllocator>& memory_allocator,
+    bool use_adaptive_mutex, CacheMetadataChargePolicy metadata_charge_policy) {
   return NewLRUCache(capacity, num_shard_bits, strict_capacity_limit,
                      high_pri_pool_ratio, memory_allocator, use_adaptive_mutex,
                      metadata_charge_policy, nullptr);

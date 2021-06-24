@@ -93,7 +93,8 @@ class UserKeyTablePropertiesCollectorFactory
     : public IntTblPropCollectorFactory {
  public:
   explicit UserKeyTablePropertiesCollectorFactory(
-      const std::shared_ptr<TablePropertiesCollectorFactory>& user_collector_factory)
+      const std::shared_ptr<TablePropertiesCollectorFactory>&
+          user_collector_factory)
       : user_collector_factory_(user_collector_factory) {}
   virtual IntTblPropCollector* CreateIntTblPropCollector(
       uint32_t column_family_id) override {

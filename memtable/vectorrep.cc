@@ -55,8 +55,8 @@ class VectorRep : public MemTableRep {
     void DoSort() const;
    public:
     explicit Iterator(class VectorRep* vrep,
-      const std::shared_ptr<std::vector<const char*>>& bucket,
-      const KeyComparator& compare);
+                      const std::shared_ptr<std::vector<const char*>>& bucket,
+                      const KeyComparator& compare);
 
     // Initialize an iterator over the specified collection.
     // The returned iterator is not valid.
@@ -143,14 +143,15 @@ VectorRep::VectorRep(const KeyComparator& compare, Allocator* allocator,
   bucket_.get()->reserve(count);
 }
 
-VectorRep::Iterator::Iterator(class VectorRep* vrep,
-                   const std::shared_ptr<std::vector<const char*>>& bucket,
-                   const KeyComparator& compare)
-: vrep_(vrep),
-  bucket_(bucket),
-  cit_(bucket_->end()),
-  compare_(compare),
-  sorted_(false) { }
+VectorRep::Iterator::Iterator(
+    class VectorRep* vrep,
+    const std::shared_ptr<std::vector<const char*>>& bucket,
+    const KeyComparator& compare)
+    : vrep_(vrep),
+      bucket_(bucket),
+      cit_(bucket_->end()),
+      compare_(compare),
+      sorted_(false) {}
 
 void VectorRep::Iterator::DoSort() const {
   // vrep is non-null means that we are working on an immutable memtable

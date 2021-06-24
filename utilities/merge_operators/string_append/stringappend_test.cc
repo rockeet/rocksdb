@@ -65,9 +65,7 @@ class StringLists {
   //Constructor: specifies the rocksdb db
   /* implicit */
   StringLists(const std::shared_ptr<DB>& db)
-      : db_(db),
-        merge_option_(),
-        get_option_() {
+      : db_(db), merge_option_(), get_option_() {
     assert(db);
   }
 

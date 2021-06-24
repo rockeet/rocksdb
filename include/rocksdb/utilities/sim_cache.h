@@ -32,13 +32,13 @@ class SimCache;
 // BlockBasedTableOptions.block_size = 4096 by default but is configurable,
 // Therefore, generally the actual memory overhead of SimCache is Less than
 // sim_capacity * 2%
-extern const std::shared_ptr<SimCache> NewSimCache(const std::shared_ptr<Cache>& cache,
-                                             size_t sim_capacity,
-                                             int num_shard_bits);
+extern const std::shared_ptr<SimCache> NewSimCache(
+    const std::shared_ptr<Cache>& cache, size_t sim_capacity,
+    int num_shard_bits);
 
-extern const std::shared_ptr<SimCache> NewSimCache(const std::shared_ptr<Cache>& sim_cache,
-                                             const std::shared_ptr<Cache>& cache,
-                                             int num_shard_bits);
+extern const std::shared_ptr<SimCache> NewSimCache(
+    const std::shared_ptr<Cache>& sim_cache,
+    const std::shared_ptr<Cache>& cache, int num_shard_bits);
 
 class SimCache : public Cache {
  public:

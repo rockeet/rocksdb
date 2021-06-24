@@ -451,7 +451,8 @@ void SstFileManagerImpl::OnDeleteFileImpl(const std::string& file_path) {
   tracked_files_.erase(tracked_file);
 }
 
-SstFileManager* NewSstFileManager(Env* env, const std::shared_ptr<Logger>& info_log,
+SstFileManager* NewSstFileManager(Env* env,
+                                  const std::shared_ptr<Logger>& info_log,
                                   const std::string& trash_dir,
                                   int64_t rate_bytes_per_sec,
                                   bool delete_existing_trash, Status* status,
@@ -463,13 +464,11 @@ SstFileManager* NewSstFileManager(Env* env, const std::shared_ptr<Logger>& info_
                            bytes_max_delete_chunk);
 }
 
-SstFileManager* NewSstFileManager(Env* env, const std::shared_ptr<FileSystem>& fs,
-                                  const std::shared_ptr<Logger>& info_log,
-                                  const std::string& trash_dir,
-                                  int64_t rate_bytes_per_sec,
-                                  bool delete_existing_trash, Status* status,
-                                  double max_trash_db_ratio,
-                                  uint64_t bytes_max_delete_chunk) {
+SstFileManager* NewSstFileManager(
+    Env* env, const std::shared_ptr<FileSystem>& fs,
+    const std::shared_ptr<Logger>& info_log, const std::string& trash_dir,
+    int64_t rate_bytes_per_sec, bool delete_existing_trash, Status* status,
+    double max_trash_db_ratio, uint64_t bytes_max_delete_chunk) {
   const auto& clock = env->GetSystemClock();
   SstFileManagerImpl* res =
       new SstFileManagerImpl(clock, fs, info_log, rate_bytes_per_sec,

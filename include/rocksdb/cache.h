@@ -94,12 +94,13 @@ struct LRUCacheOptions {
   std::shared_ptr<SecondaryCache> secondary_cache;
 
   LRUCacheOptions() {}
-  LRUCacheOptions(size_t _capacity, int _num_shard_bits,
-                  bool _strict_capacity_limit, double _high_pri_pool_ratio,
-                  const std::shared_ptr<MemoryAllocator>& _memory_allocator = nullptr,
-                  bool _use_adaptive_mutex = kDefaultToAdaptiveMutex,
-                  CacheMetadataChargePolicy _metadata_charge_policy =
-                      kDefaultCacheMetadataChargePolicy)
+  LRUCacheOptions(
+      size_t _capacity, int _num_shard_bits, bool _strict_capacity_limit,
+      double _high_pri_pool_ratio,
+      const std::shared_ptr<MemoryAllocator>& _memory_allocator = nullptr,
+      bool _use_adaptive_mutex = kDefaultToAdaptiveMutex,
+      CacheMetadataChargePolicy _metadata_charge_policy =
+          kDefaultCacheMetadataChargePolicy)
       : capacity(_capacity),
         num_shard_bits(_num_shard_bits),
         strict_capacity_limit(_strict_capacity_limit),

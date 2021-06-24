@@ -70,8 +70,9 @@ class CacheShard {
 // Keys are sharded by the highest num_shard_bits bits of hash value.
 class ShardedCache : public Cache {
  public:
-  ShardedCache(size_t capacity, int num_shard_bits, bool strict_capacity_limit,
-               const std::shared_ptr<MemoryAllocator>& memory_allocator = nullptr);
+  ShardedCache(
+      size_t capacity, int num_shard_bits, bool strict_capacity_limit,
+      const std::shared_ptr<MemoryAllocator>& memory_allocator = nullptr);
   virtual ~ShardedCache() = default;
   virtual CacheShard* GetShard(uint32_t shard) = 0;
   virtual const CacheShard* GetShard(uint32_t shard) const = 0;

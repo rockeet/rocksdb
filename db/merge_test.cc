@@ -237,7 +237,8 @@ class MergeBasedCounters : public Counters {
   WriteOptions merge_option_;  // for merge
 
  public:
-  explicit MergeBasedCounters(const std::shared_ptr<DB>& db, uint64_t defaultCount = 0)
+  explicit MergeBasedCounters(const std::shared_ptr<DB>& db,
+                              uint64_t defaultCount = 0)
       : Counters(db, defaultCount), merge_option_() {}
 
   // mapped to a rocksdb Merge operation

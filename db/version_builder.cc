@@ -114,7 +114,8 @@ class VersionBuilder::Rep {
       return newly_unlinked_ssts_;
     }
 
-    void SetSharedMeta(const std::shared_ptr<SharedBlobFileMetaData>& shared_meta) {
+    void SetSharedMeta(
+        const std::shared_ptr<SharedBlobFileMetaData>& shared_meta) {
       assert(!shared_meta_);
       assert(shared_meta);
 
