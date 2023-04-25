@@ -33,6 +33,9 @@ class Cleanable {
   // not abstract and therefore clients should not override it.
   using CleanupFunction = void (*)(void* arg1, void* arg2);
 
+  inline Cleanable(CleanupFunction function, void* arg1, void* arg2)
+    : cleanup_{function, arg1, arg2, nullptr} {}
+
   // Add another Cleanup to the list
   void RegisterCleanup(CleanupFunction function, void* arg1, void* arg2);
 
@@ -75,6 +78,8 @@ class Cleanable {
       }
     }
   }
+ public:
+  inline const Cleanup& GetCleanup() { return cleanup_; }
 };
 
 // A copyable, reference-counted pointer to a simple Cleanable that only

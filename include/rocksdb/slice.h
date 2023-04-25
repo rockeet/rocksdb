@@ -159,10 +159,14 @@ class Slice {
  * to avoid memcpy by having the PinnableSlice object referring to the data
  * that is locked in the memory and release them after the data is consumed.
  */
-class PinnableSlice : public Slice, public Cleanable {
+class PinnableSlice : public Slice {
  public:
-  PinnableSlice() { buf_ = &self_space_; }
-  explicit PinnableSlice(std::string* buf) { buf_ = buf; }
+  using CleanupFunction = Cleanable::CleanupFunction;
+  PinnableSlice() { handle_ = kNotPinned; }
+  explicit PinnableSlice(std::string* buf) {
+    handle_ = size_t(buf) | kNotPinned;
+  }
+  ~PinnableSlice();
 
   PinnableSlice(PinnableSlice&& other);
   PinnableSlice& operator=(PinnableSlice&& other);
@@ -171,89 +175,66 @@ class PinnableSlice : public Slice, public Cleanable {
   PinnableSlice(PinnableSlice&) = delete;
   PinnableSlice& operator=(PinnableSlice&) = delete;
 
-  inline void PinSlice(const Slice& s, CleanupFunction f, void* arg1,
-                       void* arg2) {
-    assert(!pinned_);
-    pinned_ = true;
-    data_ = s.data();
-    size_ = s.size();
-    RegisterCleanup(f, arg1, arg2);
-    assert(pinned_);
-  }
+  void PinSlice(const Slice&, CleanupFunction, void* arg1, void* arg2 = nullptr);
+  void PinSlice(const Slice&, Cleanable*);
 
-  inline void PinSlice(const Slice& s, Cleanable* cleanable) {
-    assert(!pinned_);
-    pinned_ = true;
-    data_ = s.data();
-    size_ = s.size();
-    if (cleanable != nullptr) {
-      cleanable->DelegateCleanupsTo(this);
-    }
-    assert(pinned_);
-  }
+  Cleanable* Cleaner();
 
   inline void SyncToString(std::string* s) const {
-    assert(s == buf_);
-    if (pinned_) {
+    if (IsPinned()) {
       s->assign(data_, size_);
     } else {
       assert(size_ == s->size());
       assert(data_ == s->data() || size_ == 0);
     }
   }
-  inline void SyncToString() const { SyncToString(buf_); }
-
-  inline void PinSelf(const Slice& slice) {
-    assert(!pinned_);
-    buf_->assign(slice.data(), slice.size());
-    data_ = buf_->data();
-    size_ = buf_->size();
-    assert(!pinned_);
-  }
-
-  inline void PinSelf() {
-    assert(!pinned_);
-    data_ = buf_->data();
-    size_ = buf_->size();
-    assert(!pinned_);
-  }
+  void SyncToString() const;
+  void PinSelf(const Slice& slice);
+  void PinSelf();
 
   void remove_suffix(size_t n) {
     assert(n <= size());
-    if (pinned_) {
+    if (IsPinned()) {
       size_ -= n;
     } else {
-      buf_->erase(size() - n, n);
+      GetSelf()->erase(size() - n, n);
       PinSelf();
     }
   }
 
   void remove_prefix(size_t n) {
     assert(n <= size());
-    if (pinned_) {
+    if (IsPinned()) {
       data_ += n;
       size_ -= n;
     } else {
-      buf_->erase(0, n);
+      GetSelf()->erase(0, n);
       PinSelf();
     }
   }
 
   void Reset() {
-    Cleanable::Reset();
-    pinned_ = false;
-    size_ = 0;
+    this->~PinnableSlice();
+    new(this)PinnableSlice();
   }
 
-  inline std::string* GetSelf() { return buf_; }
-
-  inline bool IsPinned() const { return pinned_; }
+  std::string* GetSelf() const;
+  inline bool IsPinned() const { return (handle_ & 7) != kNotPinned; }
 
  private:
+  struct CleanerString : public Cleanable {
+    using Cleanable::Cleanable;
+    std::string self_space;
+    std::string *str_ptr = &self_space;
+  };
+  enum HandleType {
+    kNotPinned,      // handle is std::string, no need free this->data_, maybe null
+    kFreeSlice,      // handle is std::string,    need free this->data_
+    kFreeHandle,     // handle is a malloc block, no std::string, need free handle
+    kCleanerString,  // this is rare case
+  };
+  size_t handle_;
   friend class PinnableSlice4Test;
-  std::string self_space_;
-  std::string* buf_;
-  bool pinned_ = false;
 };
 
 // A set of Slices that are virtually concatenated together.  'parts' points

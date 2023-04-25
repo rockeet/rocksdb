@@ -144,7 +144,7 @@ void BlobSource::PinCachedBlob(CacheHandleGuard<BlobContents>* cached_blob,
   constexpr Cleanable* cleanable = nullptr;
   value->PinSlice(cached_blob->GetValue()->data(), cleanable);
 
-  cached_blob->TransferTo(value);
+  cached_blob->TransferTo(value->Cleaner());
 }
 
 void BlobSource::PinOwnedBlob(std::unique_ptr<BlobContents>* owned_blob,

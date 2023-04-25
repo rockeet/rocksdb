@@ -209,6 +209,7 @@ static void ReleaseStringHeap(void* s, void*) {
 class PinnableSlice4Test : public PinnableSlice {
  public:
   void TestStringIsRegistered(std::string* s) {
+    auto& cleanup_ = Cleaner()->GetCleanup();
     ASSERT_TRUE(cleanup_.function == ReleaseStringHeap);
     ASSERT_EQ(cleanup_.arg1, s);
     ASSERT_EQ(cleanup_.arg2, nullptr);

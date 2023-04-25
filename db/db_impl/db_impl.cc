@@ -2331,10 +2331,10 @@ Status DBImpl::GetImpl(const ReadOptions& read_options, const Slice& key,
                   sl, nullptr /* cleanable */);
               if (i == state->merge_context.GetOperands().size() - 1) {
                 shared_cleanable.MoveAsCleanupTo(
-                    get_impl_options.merge_operands);
+                    get_impl_options.merge_operands->Cleaner());
               } else {
                 shared_cleanable.RegisterCopyWith(
-                    get_impl_options.merge_operands);
+                    get_impl_options.merge_operands->Cleaner());
               }
               get_impl_options.merge_operands++;
             }

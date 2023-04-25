@@ -17,6 +17,7 @@
 #include "rocksdb/slice_transform.h"
 #include "rocksdb/utilities/object_registry.h"
 #include "rocksdb/utilities/options_type.h"
+#include "port/likely.h"
 #include "util/string_util.h"
 
 namespace ROCKSDB_NAMESPACE {
@@ -372,32 +373,167 @@ bool Slice::DecodeHex(std::string* result) const {
 }
 
 PinnableSlice::PinnableSlice(PinnableSlice&& other) {
-  *this = std::move(other);
+  data_ = other.data_;
+  size_ = other.size_;
+  handle_ = other.handle_;
+  new(&other)PinnableSlice();
+}
+
+void PinnableSlice::PinSlice(const Slice& s, CleanupFunction f, void* arg1,
+                             void* arg2) {
+  assert(!IsPinned());
+  data_ = s.data();
+  size_ = s.size();
+  if (CleanupFunction(::free) == f) {
+    if (arg1 == s.data_) {
+      handle_ = (handle_ & ~3) | kFreeSlice;
+    } else if ((handle_ & ~7) == 0) {
+      handle_ = size_t(arg1) | kFreeHandle;
+    } else {
+      auto cs = new CleanerString(f, arg1, arg2);
+      cs->str_ptr = (std::string*)(handle_ & ~7);
+      handle_ = size_t(cs) | kCleanerString;
+    }
+  }
+  else {
+    auto cs = new CleanerString(f, arg1, arg2);
+    if (auto str_ptr = (std::string*)(handle_ & ~7)) {
+      cs->str_ptr = str_ptr;
+    }
+    handle_ = size_t(cs) | kCleanerString;
+  }
+  assert(IsPinned());
+}
+
+void PinnableSlice::PinSlice(const Slice& s, Cleanable* cleanable) {
+  assert(!IsPinned());
+  data_ = s.data();
+  size_ = s.size();
+  if (cleanable != nullptr) {
+    auto& c = cleanable->GetCleanup();
+    if (CleanupFunction(::free) == c.function && !c.next) {
+      if (c.arg1 == s.data_) {
+        handle_ = (handle_ & ~3) | kFreeSlice;
+      } else if ((handle_ & ~7) == 0) {
+        handle_ = size_t(c.arg1) | (handle_ & 4) | kFreeHandle;
+      } else {
+        auto cs = new CleanerString(c.function, c.arg1, c.arg2);
+        cs->str_ptr = (std::string*)(handle_ & ~7);
+        handle_ = size_t(cs) | kCleanerString;
+      }
+    }
+    else {
+      auto cs = new CleanerString;
+      if (auto str_ptr = (std::string*)(handle_ & ~7)) {
+        cs->str_ptr = str_ptr;
+      }
+      cleanable->DelegateCleanupsTo(cs);
+      handle_ = size_t(cs) | kCleanerString;
+    }
+  }
+  assert(IsPinned());
+}
+
+void PinnableSlice::PinSelf(const Slice& slice) {
+  assert(!IsPinned());
+  auto str_ptr = (std::string*)(handle_ & ~7);
+  if (!str_ptr) {
+    str_ptr = new std::string(slice.data_, slice.size_);
+    handle_ = size_t(str_ptr) | 4 | (handle_ & 3);
+  } else {
+    str_ptr->assign(slice.data(), slice.size());
+  }
+  data_ = str_ptr->data();
+  size_ = str_ptr->size();
+  assert(!IsPinned());
+}
+
+std::string* PinnableSlice::GetSelf() const {
+  void* ptr = (void*)(handle_ & ~7);
+  const auto ht = HandleType(handle_ & 3);
+  if (ht < kCleanerString) {
+    if (!ptr) {
+      ptr = new std::string;
+      const_cast<PinnableSlice*>(this)->handle_ = size_t(ptr) | 4 | ht;
+    }
+    return (std::string*)(ptr);
+  }
+  else {
+    assert(ptr != nullptr);
+    return ((CleanerString*)(ptr))->str_ptr;
+  }
+}
+
+Cleanable* PinnableSlice::Cleaner() {
+  const auto ht = HandleType(handle_ & 3);
+  if (ht < kCleanerString) {
+    auto cs = new CleanerString;
+    if (ht < kFreeHandle) {
+      if (auto str_ptr = (std::string*)(handle_ & ~7)) {
+        if (handle_ & 4) { // owner
+          cs->self_space = std::move(*str_ptr);
+          delete str_ptr;
+        } else {
+          cs->str_ptr = str_ptr;
+        }
+      }
+      if (ht == kFreeSlice) {
+        cs->RegisterCleanup(CleanupFunction(::free), (void*)(data_), nullptr);
+      }
+    }
+    else if (ht == kFreeHandle) {
+      cs->RegisterCleanup(CleanupFunction(::free), (void*)(handle_ & ~7), nullptr);
+    }
+    handle_ = size_t(cs) | kCleanerString;
+  }
+  return (Cleanable*)(handle_ & ~7);
+}
+
+void PinnableSlice::PinSelf() {
+  assert(!IsPinned());
+  auto str_ptr = (std::string*)(handle_ & ~7);
+  if (!str_ptr) {
+    data_ = "";
+    size_ = 0;
+  } else {
+    data_ = str_ptr->data();
+    size_ = str_ptr->size();
+  }
+  assert(!IsPinned());
+}
+
+void PinnableSlice::SyncToString() const {
+  std::string* str_ptr = GetSelf();
+  assert(str_ptr != nullptr);
+  SyncToString(str_ptr);
+}
+
+PinnableSlice::~PinnableSlice() {
+  const auto ht = HandleType(handle_ & 3);
+  if (ht < kCleanerString) {
+    if (ht == kFreeSlice) {
+      ::free((void*)data_);
+    }
+    else if (ht == kFreeHandle) {
+      assert((handle_ & 4) == 0);
+      ::free((void*)(handle_ & ~7));
+    }
+    if (handle_ & 4) {
+      auto str_ptr = (std::string*)(handle_ & ~7);
+      delete str_ptr;
+    }
+  }
+  else {
+    auto cs = (CleanerString*)(handle_ & ~7);
+    assert(cs != nullptr);
+    delete cs;
+  }
 }
 
 PinnableSlice& PinnableSlice::operator=(PinnableSlice&& other) {
   if (this != &other) {
-    Cleanable::Reset();
-    Cleanable::operator=(std::move(other));
-    size_ = other.size_;
-    pinned_ = other.pinned_;
-    if (pinned_) {
-      data_ = other.data_;
-      // When it's pinned, buf should no longer be of use.
-    } else {
-      if (other.buf_ == &other.self_space_) {
-        self_space_ = std::move(other.self_space_);
-        buf_ = &self_space_;
-        data_ = buf_->data();
-      } else {
-        buf_ = other.buf_;
-        data_ = other.data_;
-      }
-    }
-    other.self_space_.clear();
-    other.buf_ = &other.self_space_;
-    other.pinned_ = false;
-    other.PinSelf();
+    this->~PinnableSlice();
+    new(this)PinnableSlice(std::move(other));
   }
   return *this;
 }
